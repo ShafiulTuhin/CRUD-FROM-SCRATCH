@@ -1,11 +1,5 @@
 [
   {
-    "id": 1,
-    "name": "Wireless Mouse",
-    "price": 25,
-    "description": "A smooth and responsive wireless mouse with ergonomic design."
-  },
-  {
     "id": 2,
     "name": "Mechanical Keyboard",
     "price": 80,
