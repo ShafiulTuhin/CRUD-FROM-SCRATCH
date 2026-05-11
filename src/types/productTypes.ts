@@ -1,4 +1,4 @@
-export interface IType {
+export interface IProduct {
   id: number;
   name: string;
   price: number;

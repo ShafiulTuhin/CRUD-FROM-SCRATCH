@@ -1,6 +1,6 @@
 import type { IncomingMessage, ServerResponse } from "node:http";
 import { insertProduct, readProduct } from "../service/products.service";
-import type { IType } from "../types/productTypes";
+import type { IProduct, IType } from "../types/productTypes";
 import { parseBody } from "../utility/parseBody";
 
 export const productController = async (
@@ -25,7 +25,7 @@ export const productController = async (
       }),
     );
   } else if (id !== null && method === "GET") {
-    const product = products.find((prd: IType) => prd.id === id);
+    const product = products.find((prd: IProduct) => prd.id === id);
 
     res.writeHead(200, { "content-type": "application/json" });
     res.end(
@@ -49,6 +49,29 @@ export const productController = async (
       JSON.stringify({
         message: "Successfully retrieved",
         data: newProduct,
+      }),
+    );
+  } else if (method === "PUT" && id !== null) {
+    const body = await parseBody(req);
+    const products = readProduct();
+
+    const index = products.findIndex((p: IProduct) => p.id === id);
+    if (index < 0) {
+      res.writeHead(404, { "content-type": "application/json" });
+      res.end(
+        JSON.stringify({
+          message: "No product found!",
+          data: null,
+        }),
+      );
+    }
+    products[index] = { id: products[index].id, ...body };
+    insertProduct(products);
+    res.writeHead(200, { "content-type": "application/json" });
+    res.end(
+      JSON.stringify({
+        message: "Product updated successfully",
+        data: products[index],
       }),
     );
   }
